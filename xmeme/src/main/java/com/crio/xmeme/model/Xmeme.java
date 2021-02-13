@@ -1,10 +1,15 @@
 package com.crio.xmeme.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * This is Xmeme POJO class for Xmeme Application
+ * Act as a Light Weight Object to transfer data
+ */
 @Entity
 @Table(name = "xmeme")
 public class Xmeme implements Serializable {
@@ -15,10 +20,12 @@ public class Xmeme implements Serializable {
     @Column(name = "id")
     private int id;
 
+    @NotNull
     @JsonProperty("name")
     @Column(name = "name")
     private String name;
 
+    @NotNull
     @JsonProperty("url")
     @Column(name = "url")
     private String url;
@@ -63,6 +70,16 @@ public class Xmeme implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "Xmeme{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", caption='" + caption + '\'' +
+                '}';
     }
 
     public int getId() {

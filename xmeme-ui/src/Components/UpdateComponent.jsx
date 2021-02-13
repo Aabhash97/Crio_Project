@@ -14,44 +14,58 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "react-bootstrap/Form";
-import { Button } from "@material-ui/core";
+import Button from "react-bootstrap/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { useEffect } from "react";
+import { useToasts } from "react-toast-notifications";
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  // name: yup.string().required(),
   caption: yup.string().required(),
-  // url: yup
-  //   .string()
-  //   .matches(
-  //     /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-  //     "Enter correct url!"
-  //   )
-  //   .required(),
-  
+  url: yup
+    .string()
+    .matches(
+      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      "Enter correct url!"
+    )
+    .required(),
 });
 
-export default function UpdateComponent() {
+export default function UpdateComponent(props) {
+  const { addToast } = useToasts();
+
   const initialState = {
     name: "",
     caption: "",
     url: "",
-    id :"",
+    id: "",
   };
 
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
   });
   const [meme, setMeme] = useState(initialState);
+  useEffect(() => {
+    getMemes(props.id);
+  }, [props.id]);
+
+  const getMemes = (id) => {
+    XmemeService.getMemesById(id).then((response) => {
+      setMeme(response.data);
+    });
+  };
   const saveMemes = () => {
     console.log("Im here");
     var data = {
       name: meme.name,
       url: meme.url,
       caption: meme.caption,
-      id :meme.id,
-    }; 
-    XmemeService.UpdateMemes(data,data.id);
+      id: meme.id,
+    };
+    XmemeService.UpdateMemes(data, data.id);
     setOpen(false);
-  };c
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -69,74 +83,79 @@ export default function UpdateComponent() {
 
   return (
     <div>
+      <IconButton aria-label="settings" onClick={handleClickOpen}>
+        <MoreVertIcon />
+      </IconButton>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <form>
-          <DialogTitle id="form-dialog-title">Hey👋</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Start your Meme Making Journey😀Publish Your meme Now😍
-            </DialogContentText>
-            <TextField
-              autoFocus
-              name="name"
-              required
-              value={meme.name}
-              margin="dense"
-              id="name"
-              label="Name"
-              type="name"
-              fullWidth
-              onChange={handleInputChange}
-              ref={register}
-            />
+        <DialogTitle id="form-dialog-title">Hey👋</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Start your Meme Making Journey😀Publish Your meme Now😍
+          </DialogContentText>
 
+          <Form>
+            <Form.Group controlId="GiveName">
+              <Form.Label>Name*</Form.Label>
+              <Form.Control
+                type="text"
+                id="Name"
+                placeholder="Enter Your Name"
+                // onChange={handleInputChange}
+                value={meme.name}
+                name="name"
+                disabled="true"
+              />
+            </Form.Group>
 
-            <br></br>
+            <Form.Group controlId="Give Caption">
+              <Form.Label>Caption*</Form.Label>
+              <Form.Control
+                id="caption"
+                type="text"
+                placeholder="Give some Funny Caption"
+                onChange={handleInputChange}
+                ref={register}
+                value={meme.caption}
+                name="caption"
+              />
+              {errors.caption && <h6>Caption is required</h6>}
+            </Form.Group>
 
-            <TextField
-              name="caption"
-              required
-              value={meme.caption}
-              margin="dense"
-              id="caption"
-              label="Caption"
-              type="caption"
-              fullWidth
-              onChange={handleInputChange}
-              ref={register}
-            />
-
-            <TextField
-              name="url"
-              required
-              value={meme.url}
-              margin="dense"
-              id="url"
-              label="Url"
-              type="url"
-              fullWidth
-              onChange={handleInputChange}
-              ref={register}
-            />
-            
-          </DialogContent>
-          <DialogActions>
-            <AwesomeButton size="small" type="secondary" onPress={handleClose}>
-              Cancel
-            </AwesomeButton>
-            <AwesomeButton
-              size="small"
-              type="primary"
-              onPress={handleSubmit(saveMemes)}
-            >
-              Submit
-            </AwesomeButton>
-          </DialogActions>
-        </form>
+            <Form.Group controlId="GiveUrl">
+              <Form.Label>URL*</Form.Label>
+              <Form.Control
+                id="caption"
+                type="text"
+                placeholder="Enter Image Url with Http"
+                onChange={handleInputChange}
+                ref={register}
+                value={meme.url}
+                name="url"
+              />
+              {errors.url && <h6>Enter Valid URL</h6>}
+            </Form.Group>
+            <DialogActions>
+              <Button
+                variant="outline-danger"
+                type="cancel"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="outline-primary"
+                type="submit"
+                onClick={handleSubmit(saveMemes)}
+              >
+                Submit
+              </Button>
+            </DialogActions>
+          </Form>
+        </DialogContent>
       </Dialog>
     </div>
   );

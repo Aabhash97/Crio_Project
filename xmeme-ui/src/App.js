@@ -14,7 +14,9 @@ import Divider from "@material-ui/core/Divider";
 import "semantic-ui-css/semantic.min.css";
 import ImageFeed from "./Components/ImageFeed";
 import FooterComponenet from "./Components/FooterComponenet";
-
+import UpdateComponent from "./Components/UpdateComponent";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { ToastProvider } from "react-toast-notifications";
 function App() {
   const [theme, themeToggler, mountedComponent] = useDarkMode();
   const themeMode = theme === "light" ? lightTheme : darkTheme;
@@ -22,6 +24,7 @@ function App() {
   if (!mountedComponent) return <div />;
 
   return (
+    <ToastProvider>
     <ThemeProvider theme={themeMode}>
       <>
         <GlobalStyles />
@@ -64,11 +67,13 @@ function App() {
             </Navbar>
           </>
           <Divider />
-          <ImageFeed/>
+          <ImageFeed />
         </div>
-        <FooterComponenet/>
+
+        <FooterComponenet />
       </>
     </ThemeProvider>
+    </ToastProvider>
   );
 }
 
