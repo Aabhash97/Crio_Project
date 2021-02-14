@@ -1,6 +1,5 @@
 import EmojiReact from "react-emoji-react";
 import React, { Component } from "react";
-import UpdateComponent from "./UpdateComponent";
 
 const emojis = [
   {

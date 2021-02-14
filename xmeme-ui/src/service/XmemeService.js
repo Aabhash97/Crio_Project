@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "http://localhost:8081/memes";
+const url = "https://xmeme-api10.herokuapp.com/memes";
 
 class XmemeService {
   async getMemes() {

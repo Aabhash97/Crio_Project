@@ -1,3 +1,4 @@
+import { Grid } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -5,21 +6,13 @@ import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import { red } from "@material-ui/core/colors";
-import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { useLayoutEffect, useEffect, useState } from "react";
-import logo from "../meme2.svg";
-import ReactingComponent from "./emoji";
-import XmemeService from "../service/XmemeService";
-import { Grid } from "@material-ui/core";
-import UpdateComponent from "./UpdateComponent";
-import Button from "react-bootstrap/Button";
-import UpdateIcon from "@material-ui/icons/Update";
-import { useHistory } from "react-router-dom";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Update from "@material-ui/icons/Update";
+import React, { useLayoutEffect, useState } from "react";
 import { useToasts } from "react-toast-notifications";
+import XmemeService from "../service/XmemeService";
+import ReactingComponent from "./emoji";
+import UpdateComponent from "./UpdateComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,8 +45,7 @@ export default function ImageFeed() {
 
   const getMemes = () => {
     XmemeService.getMemes().then((response) => {
-      if (response.type === "Success") 
-      setmemes(response.data);
+      if (response.type === "Success") setmemes(response.data);
       else {
         addToast(response.message, {
           appearance: "error",

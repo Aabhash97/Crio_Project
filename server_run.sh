@@ -1,7 +1,8 @@
 #!/bin/bash
-./mvnw clean install
+cd xmeme
+sudo mvn clean install -DskipTests
 
-java -jar target/xmeme-0.0.1-SNAPSHOT.jar &
+sudo java -jar target/xmeme-0.0.1-SNAPSHOT.jar &
 
 
 while ! netstat -tna | grep 'LISTEN\>' | grep -q ':8081\>'; do
